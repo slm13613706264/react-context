@@ -1,25 +1,52 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {PropTypes} from 'prop-types'
+
+class Container extends React.Component {
+  getChildContext() {
+    return {
+      color: 'blue',
+      // size: '14px',
+      // num: 100
+    }
+  }
+  render() {
+    return <MessageList messages = {this.props.messages} />
+  }
+}
+
+Container.childContextTypes = {
+  color: PropTypes.string
+}
+
+
+class MessageList extends React.Component {
+  render() {
+    return (
+      <ul>
+        {
+          this.props.messages.map((item, index) => {
+            return <Message key={index} message={item} />
+          })
+        }
+      </ul>  
+    )
+  }
+  
+}
+
+class Message extends React.Component {
+  render() {
+    return <li style={{color: this.context.color}}>{this.props.message}</li>
+  }
+}
+Message.contextTypes = {
+  color: PropTypes.string
+}
 
 function App() {
+  let messages = [1, 2, 3];
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container messages={messages} />
   );
 }
 
